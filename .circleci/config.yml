@@ -4,6 +4,11 @@ version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+
+commands:
+    print_pipeline_id:
+       steps:
+         - run: echo ${CIRCLE_WORKFLOW_ID}
 jobs:
   #say-hello:
   #  # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -43,26 +48,34 @@ jobs:
   #        command: "echo  my name is $MY_NAME_VAR"
   
   #2nd activity
-  save_hello_world_output:
-     docker:
-         - image: circleci/node:13.8.0
-     steps:
-        - run:
-            name: "Save a file"
-            command: "echo Hello Kapil > ~/output.txt"  
-        - persist_to_workspace:
-            root: ~/
-            paths:
-                - output.txt
-  print_output_file:
-     docker:
-         - image: circleci/node:13.8.0
-     steps:
-        - attach_workspace:
-            at: ~/
-        - run:
-            name: "Print file"
-            command: "cat ~/output.txt"  
+  #save_hello_world_output:
+  #   docker:
+  #       - image: circleci/node:13.8.0
+  #   steps:
+  #      - run:
+  #          name: "Save a file"
+  #          command: "echo Hello Kapil > ~/output.txt"  
+  #      - persist_to_workspace:
+  #          root: ~/
+  #          paths:
+  #              - output.txt
+  #print_output_file:
+  #   docker:
+  #       - image: circleci/node:13.8.0
+  #   steps:
+  #      - attach_workspace:
+  #          at: ~/
+  #      - run:
+  #          name: "Print file"
+  #          command: "cat ~/output.txt"  
+  
+  #3rd Activity
+  print_cmd_id:
+    docker:
+        - image: circleci/node:13.8.0
+    steps:
+        - print_pipeline_id
+  
         
 
 # Invoke jobs via workflows
@@ -79,8 +92,9 @@ workflows:
   #          requires:
   #              - print_world
   
-       - save_hello_world_output
-       - print_output_file:  
-            requires:
-                - save_hello_world_output
+  #     - save_hello_world_output
+  #     - print_output_file:  
+  #          requires:
+  #              - save_hello_world_output
+        - print_cmd_id
             
