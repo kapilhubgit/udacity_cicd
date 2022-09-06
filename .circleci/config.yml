@@ -42,6 +42,6 @@ workflows:
       #- say-hello
       - print_hello
       - print_world:
-            require:
+            requires:
                 - print_hello
             
