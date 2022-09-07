@@ -82,12 +82,13 @@ jobs:
     docker:
         - image: circleci/node:13.8.0
     steps:
+        
+        - run: "echo job 1"
+        - run: exit 1
         - run: 
                 name: on_error
                 command: "echo error in job"
                 when: on_fail
-        - run: "echo job 1"
-        - run: exit 1
         - run: "echo job 2"
         
     
