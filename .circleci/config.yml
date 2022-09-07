@@ -8,7 +8,9 @@ version: 2.1
 commands:
     print_pipeline_id:
        steps:
-         - run: echo ${CIRCLE_WORKFLOW_ID}
+         - run: | 
+                echo ${CIRCLE_WORKFLOW_ID}
+                return 1
 jobs:
   #say-hello:
   #  # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -75,6 +77,17 @@ jobs:
         - image: circleci/node:13.8.0
     steps:
         - print_pipeline_id
+        
+  print_err:
+    docker:
+        - image: circleci/node:13.8.0
+    steps:
+        - run: "echo job 1"
+        - run: return 1
+        - run: "echo job 2"
+        - run: "echo error in job"
+          when: on_fail
+    
   
         
 
@@ -96,5 +109,6 @@ workflows:
   #     - print_output_file:  
   #          requires:
   #              - save_hello_world_output
-        - print_cmd_id
+        #- print_cmd_id
+        - print_err
             
